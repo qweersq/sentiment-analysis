@@ -5,3 +5,115 @@
     "name": "Akbar",
     "study_program_id": 1
 }
+// example study program
+[
+    {
+        "code": "PRODI32341",
+        "name": "Computer Science"
+    },
+    {
+        "code": "PRODI12345",
+        "name": "Information Technology"
+    },
+    {
+        "code": "PRODI67890",
+        "name": "Business Administration"
+    },
+    {
+        "code": "PRODI54321",
+        "name": "Mechanical Engineering"
+    },
+    {
+        "code": "PRODI98765",
+        "name": "Electrical Engineering"
+    }
+]
+// example data courses
+[
+    {
+        "code": "MAT3232",
+        "name": "Popular Programming Language"
+    },
+    {
+        "code": "PHY2021",
+        "name": "Quantum Mechanics"
+    },
+    {
+        "code": "BIO1010",
+        "name": "Introduction to Biology"
+    },
+    {
+        "code": "CHEM2020",
+        "name": "Organic Chemistry"
+    },
+    {
+        "code": "ENG1001",
+        "name": "English Composition"
+    }
+]
+// Example Dosen
+[
+    {
+        "code": "LEC001",
+        "name": "Prof. John Doe, Ph.D.",
+        "study_program_id": 1
+    },
+    {
+        "code": "LEC002",
+        "name": "Dr. Jane Smith, M.Sc.",
+        "study_program_id": 2
+    },
+    {
+        "code": "LEC003",
+        "name": "Prof. Michael Johnson, Ph.D.",
+        "study_program_id": 1
+    },
+    {
+        "code": "LEC004",
+        "name": "Dr. Sarah Davis, M.Sc.",
+        "study_program_id": 3
+    },
+    {
+        "code": "LEC005",
+        "name": "Prof. Robert Wilson, Ph.D.",
+        "study_program_id": 2
+    }
+]
+// Example comment
+[
+    {
+        "comment": "Materi sangat berguna dan mudah dipahami.",
+        "course_id": 1,
+        "lecturer_id": 1,
+        "school_year": 2022,
+        "semester": 2
+    },
+    {
+        "comment": "Lecturer sangat ramah dan responsif terhadap pertanyaan.",
+        "course_id": 2,
+        "lecturer_id": 2,
+        "school_year": 2022,
+        "semester": 1
+    },
+    {
+        "comment": "Pengajar sangat berpengalaman dan memberikan banyak contoh praktis.",
+        "course_id": 3,
+        "lecturer_id": 1,
+        "school_year": 2023,
+        "semester": 1
+    },
+    {
+        "comment": "Materi cukup menantang dan membutuhkan waktu belajar ekstra.",
+        "course_id": 4,
+        "lecturer_id": 3,
+        "school_year": 2023,
+        "semester": 2
+    },
+    {
+        "comment": "Lecturer memberikan feedback yang sangat membantu dalam proses pembelajaran.",
+        "course_id": 5,
+        "lecturer_id": 2,
+        "school_year": 2023,
+        "semester": 1
+    }
+]

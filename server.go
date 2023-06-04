@@ -18,17 +18,20 @@ var (
 	studyProgramRepository repository.StudyProgramRepository  = repository.NewStudyProgramRepository(db)
 	lecturerRepository     repository.LecturerRepository      = repository.NewLecturerRepository(db)
 	courseRepository       repository.CourseRepository        = repository.NewCourseRepository(db)
+	commentRepository      repository.CommentRepository       = repository.NewCommentRepository(db)
 	jwtService             service.JWTService                 = service.NewJWTService()
 	authService            service.AuthService                = service.NewAuthService(userRepository)
 	userService            service.UserService                = service.NewUserService(userRepository)
 	studyProgramService    service.StudyProgramService        = service.NewStudyProgramService(studyProgramRepository)
 	lecturerService        service.LecturerService            = service.NewLecturerService(lecturerRepository)
 	courseService          service.CourseService              = service.NewCourseService(courseRepository)
+	commentService         service.CommentService             = service.NewCommentServiceWithLecturer(commentRepository, lecturerRepository)
 	authController         controllers.AuthController         = controllers.NewAuthController(authService, jwtService)
 	userController         controllers.UserController         = controllers.NewUserController(userService, jwtService)
 	studyProgramController controllers.StudyProgramController = controllers.NewStudyProgramController(studyProgramService, jwtService)
 	lecturerController     controllers.LecturerController     = controllers.NewLecturerController(lecturerService, jwtService)
 	courseController       controllers.CourseController       = controllers.NewCourseController(courseService, jwtService)
+	commentController      controllers.CommentController      = controllers.NewCommentController(commentService, jwtService)
 )
 
 func main() {
@@ -86,5 +89,15 @@ func main() {
 		courseRoutes.GET("/:id", courseController.GetDataByID)
 		courseRoutes.DELETE("/:id", courseController.Delete)
 	}
+
+	commentRoutes := router.Group("comment", middleware.AuthorizeJWT(jwtService))
+	{
+		commentRoutes.POST("/", commentController.Create)
+		commentRoutes.PUT("/", commentController.Update)
+		commentRoutes.GET("/", commentController.GetAllData)
+		commentRoutes.GET("/:id", commentController.GetDataByID)
+		commentRoutes.DELETE("/:id", commentController.Delete)
+	}
+
 	router.Run(":" + port)
 }
