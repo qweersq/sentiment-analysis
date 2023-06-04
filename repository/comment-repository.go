@@ -8,6 +8,7 @@ import (
 
 type CommentRepository interface {
 	InsertComment(comments models.Comments) models.Comments
+	InsertToSentimentAnalysis(sentimentAnalysis models.SentimentAnalysis) models.SentimentAnalysis
 	UpdateComment(comments models.Comments) models.Comments
 	GetAllComment() []models.Comments
 	GetCommentByID(id uint64) models.Comments
@@ -32,6 +33,11 @@ func (db *commentConnection) InsertComment(comments models.Comments) models.Comm
 func (db *commentConnection) UpdateComment(comments models.Comments) models.Comments {
 	db.connection.Save(&comments)
 	return comments
+}
+
+func (db *commentConnection) InsertToSentimentAnalysis(sentimentAnalysis models.SentimentAnalysis) models.SentimentAnalysis {
+	db.connection.Save(&sentimentAnalysis)
+	return sentimentAnalysis
 }
 
 func (db *commentConnection) GetAllComment() []models.Comments {

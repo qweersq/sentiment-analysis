@@ -1,20 +1,24 @@
 package dto
 
 type CommentCreateDTO struct {
-	Comment    string `json:"comment" form:"comment" binding:"required"`
-	CourseID   uint64 `json:"course_id" form:"course_id" binding:"required"`
-	LecturerID uint64 `json:"lecturer_id" form:"lecturer_id" binding:"required"`
-	SchoolYear uint   `json:"school_year" form:"school_year" binding:"required"`
-	Semester   uint   `json:"semester" form:"semester" binding:"required"`
+	SentimentType   string  `json:"sentiment_type" form:"sentiment_type"`
+	ConfidenceLevel float64 `json:"confidence_level" form:"confidence_level"`
+	Comment         string  `json:"comment" form:"comment" binding:"required"`
+	CourseID        uint64  `json:"course_id" form:"course_id" binding:"required"`
+	LecturerID      uint64  `json:"lecturer_id" form:"lecturer_id" binding:"required"`
+	SchoolYear      uint    `json:"school_year" form:"school_year" binding:"required"`
+	Semester        uint    `json:"semester" form:"semester" binding:"required"`
 }
 
 type CommentUpdateDTO struct {
-	ID         uint64 `json:"id" form:"id" binding:"required"`
-	Comment    string `json:"comment" form:"comment" binding:"required"`
-	CourseID   uint64 `json:"course_id" form:"course_id" binding:"required"`
-	LecturerID uint64 `json:"lecturer_id" form:"lecturer_id" binding:"required"`
-	SchoolYear uint   `json:"school_year" form:"school_year" binding:"required"`
-	Semester   uint   `json:"semester" form:"semester" binding:"required"`
+	ID              uint64  `json:"id" form:"id" binding:"required"`
+	SentimentType   string  `json:"sentiment_type" form:"sentiment_type"`
+	ConfidenceLevel float64 `json:"confidence_level" form:"confidence_level"`
+	Comment         string  `json:"comment" form:"comment" binding:"required"`
+	CourseID        uint64  `json:"course_id" form:"course_id" binding:"required"`
+	LecturerID      uint64  `json:"lecturer_id" form:"lecturer_id" binding:"required"`
+	SchoolYear      uint    `json:"school_year" form:"school_year" binding:"required"`
+	Semester        uint    `json:"semester" form:"semester" binding:"required"`
 }
 
 type CommentDTO struct {

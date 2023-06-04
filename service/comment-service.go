@@ -1,9 +1,13 @@
 package service
 
 import (
+	"fmt"
 	"sentiment/dto"
 	"sentiment/models"
 	"sentiment/repository"
+
+	gt "github.com/bas24/googletranslatefree"
+	"github.com/jonreiter/govader"
 )
 
 type CommentService interface {
@@ -35,7 +39,29 @@ func (service *commentService) InsertComment(comment dto.CommentCreateDTO) dto.C
 	commentToInsert.Semester = comment.Semester
 	commentInserted := service.commentRepository.InsertComment(commentToInsert)
 
+	// insert to sentiment analysis
+	sentimentAnalysisToInsert := models.SentimentAnalysis{}
+	result, err := gt.Translate(comment.Comment, "id", "en")
+	if err != nil {
+		fmt.Println(err)
+	}
+	analyzer := govader.NewSentimentIntensityAnalyzer()
+	sentiment := analyzer.PolarityScores(result)
+
+	if sentiment.Compound > 0.05 {
+		sentimentAnalysisToInsert.SentimentType = "Positive"
+	} else if sentiment.Compound < -0.05 {
+		sentimentAnalysisToInsert.SentimentType = "Negative"
+	} else {
+		sentimentAnalysisToInsert.SentimentType = "Neutral"
+	}
+	sentimentAnalysisToInsert.CommentID = uint(commentInserted.ID)
+	sentimentAnalysisToInsert.ConfidenceLevel = sentiment.Compound
+	service.commentRepository.InsertToSentimentAnalysis(sentimentAnalysisToInsert)
+
 	var commentDTO dto.CommentCreateDTO
+	commentDTO.SentimentType = sentimentAnalysisToInsert.SentimentType
+	commentDTO.ConfidenceLevel = sentimentAnalysisToInsert.ConfidenceLevel
 	commentDTO.Comment = commentInserted.Comment
 	commentDTO.CourseID = commentInserted.CourseID
 	commentDTO.LecturerID = commentInserted.LecturerID
@@ -54,8 +80,30 @@ func (service *commentService) UpdateComment(comment dto.CommentUpdateDTO) dto.C
 	commentToUpdate.Semester = comment.Semester
 	commentUpdated := service.commentRepository.UpdateComment(commentToUpdate)
 
+	// insert to sentiment analysis
+	sentimentAnalysisToInsert := models.SentimentAnalysis{}
+	result, err := gt.Translate(comment.Comment, "id", "en")
+	if err != nil {
+		fmt.Println(err)
+	}
+	analyzer := govader.NewSentimentIntensityAnalyzer()
+	sentiment := analyzer.PolarityScores(result)
+
+	if sentiment.Compound > 0.05 {
+		sentimentAnalysisToInsert.SentimentType = "Positive"
+	} else if sentiment.Compound < -0.05 {
+		sentimentAnalysisToInsert.SentimentType = "Negative"
+	} else {
+		sentimentAnalysisToInsert.SentimentType = "Neutral"
+	}
+	sentimentAnalysisToInsert.CommentID = uint(commentToUpdate.ID)
+	sentimentAnalysisToInsert.ConfidenceLevel = sentiment.Compound
+	sentimentInsert := service.commentRepository.InsertToSentimentAnalysis(sentimentAnalysisToInsert)
+
 	var commentDTO dto.CommentUpdateDTO
 	commentDTO.ID = commentUpdated.ID
+	commentDTO.SentimentType = sentimentInsert.SentimentType
+	commentDTO.ConfidenceLevel = sentimentInsert.ConfidenceLevel
 	commentDTO.Comment = commentUpdated.Comment
 	commentDTO.CourseID = commentUpdated.CourseID
 	commentDTO.LecturerID = commentUpdated.LecturerID
