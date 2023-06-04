@@ -16,13 +16,16 @@ var (
 	db                     *gorm.DB                           = config.SetupDatabaseConnection()
 	userRepository         repository.UserRepository          = repository.NewUserRepository(db)
 	studyProgramRepository repository.StudyProgramRepository  = repository.NewStudyProgramRepository(db)
+	lecturerRepository     repository.LecturerRepository      = repository.NewLecturerRepository(db)
 	jwtService             service.JWTService                 = service.NewJWTService()
 	authService            service.AuthService                = service.NewAuthService(userRepository)
 	userService            service.UserService                = service.NewUserService(userRepository)
 	studyProgramService    service.StudyProgramService        = service.NewStudyProgramService(studyProgramRepository)
+	lecturerService        service.LecturerService            = service.NewLecturerService(lecturerRepository)
 	authController         controllers.AuthController         = controllers.NewAuthController(authService, jwtService)
 	userController         controllers.UserController         = controllers.NewUserController(userService, jwtService)
 	studyProgramController controllers.StudyProgramController = controllers.NewStudyProgramController(studyProgramService, jwtService)
+	lecturerController     controllers.LecturerController     = controllers.NewLecturerController(lecturerService, jwtService)
 )
 
 func main() {
@@ -61,6 +64,15 @@ func main() {
 		studyProgramRoutes.GET("/", studyProgramController.All)
 		studyProgramRoutes.GET("/:id", studyProgramController.FindByID)
 		studyProgramRoutes.GET("/code/:code", studyProgramController.FindByCode)
+	}
+
+	lecturerRoutes := router.Group("lecturer", middleware.AuthorizeJWT(jwtService))
+	{
+		lecturerRoutes.POST("/", lecturerController.Create)
+		lecturerRoutes.PUT("/", lecturerController.Update)
+		lecturerRoutes.GET("/", lecturerController.GetAllData)
+		lecturerRoutes.GET("/:id", lecturerController.GetDataByID)
+		lecturerRoutes.DELETE("/:id", lecturerController.Delete)
 	}
 
 	router.Run(":" + port)
