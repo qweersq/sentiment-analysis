@@ -11,7 +11,7 @@ type StudyProgramService interface {
 	UpdateProdi(studyProgram dto.StudyProgramUpdateDTO) models.StudyPrograms
 	DeleteProdi(id uint64) error
 	AllProdi() []models.StudyPrograms
-	FindProdiByID(studyProgramID uint64) models.StudyPrograms
+	FindProdiByID(id uint64) (models.StudyPrograms, error)
 	FindProdiByCode(Code string) models.StudyPrograms
 }
 
@@ -55,9 +55,12 @@ func (service *studyProgramService) AllProdi() []models.StudyPrograms {
 	return allStudyProgram
 }
 
-func (service *studyProgramService) FindProdiByID(studyProgramID uint64) models.StudyPrograms {
-	studyProgram := service.studyProgramRepository.FindStudyProgramByID(studyProgramID)
-	return studyProgram
+func (s *studyProgramService) FindProdiByID(id uint64) (models.StudyPrograms, error) {
+	studyProgram, err := s.studyProgramRepository.FindStudyProgramByID(id)
+	if err != nil {
+		return studyProgram, err
+	}
+	return studyProgram, nil
 }
 
 func (service *studyProgramService) FindProdiByCode(Code string) models.StudyPrograms {

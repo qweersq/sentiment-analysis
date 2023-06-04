@@ -1,0 +1,7 @@
+// CRUD LECTURER
+// Cereate
+{
+    "code": "L001",
+    "name": "Akbar",
+    "study_program_id": 1
+}

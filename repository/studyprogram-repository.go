@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"sentiment/models"
 
 	"gorm.io/gorm"
@@ -11,7 +12,7 @@ type StudyProgramRepository interface {
 	UpdateStudyProgram(studyProgram models.StudyPrograms) models.StudyPrograms
 	DeleteStudyProgram(id uint64) error
 	AllStudyProgram() []models.StudyPrograms
-	FindStudyProgramByID(studyProgramID uint64) models.StudyPrograms
+	FindStudyProgramByID(id uint64) (models.StudyPrograms, error)
 	FindStudyProgramByCode(studyProgramName string) models.StudyPrograms
 }
 
@@ -50,10 +51,13 @@ func (db *studyProgramConnection) AllStudyProgram() []models.StudyPrograms {
 	return studyPrograms
 }
 
-func (db *studyProgramConnection) FindStudyProgramByID(studyProgramID uint64) models.StudyPrograms {
+func (db *studyProgramConnection) FindStudyProgramByID(id uint64) (models.StudyPrograms, error) {
 	var studyProgram models.StudyPrograms
-	db.connection.Find(&studyProgram, studyProgramID)
-	return studyProgram
+	db.connection.Find(&studyProgram, id)
+	if studyProgram.ID == 0 {
+		return studyProgram, errors.New("study program not found")
+	}
+	return studyProgram, nil
 }
 
 func (db *studyProgramConnection) FindStudyProgramByCode(studyProgramCode string) models.StudyPrograms {

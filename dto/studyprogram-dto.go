@@ -18,3 +18,11 @@ type StudyProgramIDDTO struct {
 type StudyProgramCodeDTO struct {
 	Code string `json:"code" form:"code" binding:"required"`
 }
+
+type ErrorDTO struct {
+	Error ErrorStudyProgramDTO `json:"error"`
+}
+
+type ErrorStudyProgramDTO struct {
+	Message string `json:"message"`
+}

@@ -89,18 +89,18 @@ func (c *studyProgramController) All(ctx *gin.Context) {
 }
 
 func (c *studyProgramController) FindByID(ctx *gin.Context) {
-	var studyProgramID dto.StudyProgramIDDTO
-	errDTO := ctx.ShouldBind(&studyProgramID)
+	id := ctx.Param("id")
 
-	if errDTO != nil {
-		res := helper.BuildErrorResponse("Failed to request", errDTO.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-		return
+	// Konversi studyProgramID menjadi tipe data uint64 atau sesuai tipe ID yang digunakan
+	studyProgramID, _ := strconv.ParseUint(id, 10, 64)
+	studyProgram, err := c.studyProgramService.FindProdiByID(studyProgramID)
+	if err != nil {
+		res := helper.BuildErrorResponse("Failed to get study program", "No data found", helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(http.StatusNotFound, res)
+	} else {
+		res := helper.BuildResponse(true, "OK!", studyProgram)
+		ctx.JSON(http.StatusOK, res)
 	}
-
-	studyPrograms := c.studyProgramService.FindProdiByID(studyProgramID.ID)
-	res := helper.BuildResponse(true, "OK!", studyPrograms)
-	ctx.JSON(http.StatusOK, res)
 }
 
 func (c *studyProgramController) FindByCode(ctx *gin.Context) {
