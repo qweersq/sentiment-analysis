@@ -32,7 +32,6 @@ func (service *lecturerService) InsertLecturer(lecturer dto.LecturerCreateDTO) d
 	lecturerInserted := service.lecturerRepository.InsertLecturer(lecturerToInsert)
 
 	var lecturerDTO dto.LecturerCreateDTO
-	lecturerDTO.ID = lecturerInserted.ID
 	lecturerDTO.Code = lecturerInserted.Code
 	lecturerDTO.Name = lecturerInserted.Name
 	lecturerDTO.StudyProgramID = lecturerInserted.StudyProgramID
@@ -40,13 +39,19 @@ func (service *lecturerService) InsertLecturer(lecturer dto.LecturerCreateDTO) d
 }
 
 func (service *lecturerService) UpdateLecturer(lecturer dto.LecturerUpdateDTO) dto.LecturerUpdateDTO {
-	lecturerToUpdate := dto.LecturerUpdateDTO{}
+	lecturerToUpdate := models.Lecturers{}
 	lecturerToUpdate.ID = uint64(lecturer.ID)
 	lecturerToUpdate.Code = lecturer.Code
 	lecturerToUpdate.Name = lecturer.Name
 	lecturerToUpdate.StudyProgramID = lecturer.StudyProgramID
 	lecturerUpdated := service.lecturerRepository.UpdateLecturer(lecturerToUpdate)
-	return lecturerUpdated
+
+	var lecturerDTO dto.LecturerUpdateDTO
+	lecturerDTO.ID = lecturerUpdated.ID
+	lecturerDTO.Code = lecturerUpdated.Code
+	lecturerDTO.Name = lecturerUpdated.Name
+	lecturerDTO.StudyProgramID = lecturerUpdated.StudyProgramID
+	return lecturerDTO
 }
 
 func (service *lecturerService) GetAllLecturer() []models.Lecturers {

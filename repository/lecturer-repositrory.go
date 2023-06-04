@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"sentiment/dto"
 	"sentiment/models"
 
 	"gorm.io/gorm"
@@ -9,7 +8,7 @@ import (
 
 type LecturerRepository interface {
 	InsertLecturer(lecturers models.Lecturers) models.Lecturers
-	UpdateLecturer(lecturers dto.LecturerUpdateDTO) dto.LecturerUpdateDTO
+	UpdateLecturer(lecturers models.Lecturers) models.Lecturers
 	GetAllLecturer() []models.Lecturers
 	GetLecturerByID(id uint64) models.Lecturers
 	DeleteLecturer(id uint64) error
@@ -26,11 +25,11 @@ func NewLecturerRepository(db *gorm.DB) LecturerRepository {
 }
 
 func (db *lecturerConnection) InsertLecturer(lecturers models.Lecturers) models.Lecturers {
-	db.connection.Preload("StudyProgram").Save(&lecturers)
+	db.connection.Save(&lecturers)
 	return lecturers
 }
 
-func (db *lecturerConnection) UpdateLecturer(lecturers dto.LecturerUpdateDTO) dto.LecturerUpdateDTO {
+func (db *lecturerConnection) UpdateLecturer(lecturers models.Lecturers) models.Lecturers {
 	db.connection.Save(&lecturers)
 	return lecturers
 }
